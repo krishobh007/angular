@@ -1,0 +1,163 @@
+@charset "utf-8";
+@font-face {
+    font-family: Armata;
+    src: url(fonts/Armata-Regular-webfont.woff);
+}
+* {	
+	margin: 0px; padding: 0px;
+	font-family: Armata;
+}
+
+body {
+	background: #0000;
+}
+.green{
+	color:green;
+}
+.red{
+	color:red;
+}
+li { cursor: pointer; }
+/* For desktop view - more than 360px*/
+@media screen and (min-width: 360px) {
+
+	.banner{
+		background-color: #E13611;
+		height: 68px;
+		width: 100%;
+		box-shadow: 0px 5px 5px #888888;
+		margin-top: 15px;
+	}
+	.left-margin{
+		margin-left: 200px;
+	}
+	.right-margin{
+		margin-right: 200px;
+	}
+
+	/*Header Menu*/
+	.topmenu {
+	    display: block;
+	    list-style: outside none none;
+	    float: right;
+	    width: 500px;
+	    padding: 12px 105px 0px 0px;
+	}
+
+	.topmenu li {
+		display:inline;
+	}
+	.topmenu a {
+		display:block;
+		float:left;
+		height:28px;
+		margin:0px 0px 0px0px;
+		text-decoration:none;
+		padding:9px 15px 0px 15px;
+		text-align:center;
+	}
+	.topmenu a {
+		color:#FFFFFF;
+	}
+	.topmenu a:hover{
+		color:#000;
+	}
+	.topmenu .active{
+		color:#000;
+	}
+	.page-title{
+		height:75px;
+		padding-top: 20px;
+		font-size: 40pt; 
+	}
+
+	hr{
+		width:78%;
+	}
+
+	.careers-desktop{
+		width:25%;
+		min-height:500px;
+		float:left;
+	}
+
+	.description{
+		width: 78%;
+		font-size: 10pt;
+	}
+
+	.notification{
+		margin-left: 20%;
+		width: 70%;
+	}
+	.form{
+		margin-left: 20%;
+
+	}
+	.form form{
+		width: 35%;
+	}
+
+	.menus-device, .careers-device{
+		visibility: hidden;
+	}
+}
+
+
+
+/* To do for devices having width less than 360px */
+@media screen and (max-width: 360px) {
+
+    .banner .left-margin,.right-margin, .topmenu , .careers-desktop{
+		visibility: hidden;
+	}
+	.banner{
+		background-color: #E13611;
+		height: 68px;
+		width: 100%;
+	}
+	.menus-device{
+		display: block;
+		float: right;
+		padding-bottom: 0px;
+		padding-left: 0px;
+		margin-right: 55px;
+		margin-top: 18px;
+		width: 150px;
+		height: 30px;
+	}
+	.page-title{
+		height:10px;
+		padding-top: 0px;
+		font-size: 20pt; 
+		margin:10px;
+	}
+
+	hr{
+		width:100%;
+	}
+
+	.description{
+		width: 100%;
+		font-size: 8pt;
+		margin:10px;
+	}
+
+	.notification{
+		
+		width: 100%;
+		margin:10px;
+	}
+	.form{
+		width: 100%;
+	}
+	.form form{
+		width: 100%;
+		margin:10px;
+	}
+	.careers-device{
+		float:left;
+		width: 100%;
+		margin:10px;
+	}
+}

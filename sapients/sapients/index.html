@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html ng-app="sapientApp">
+	<head>
+		<meta charset="UTF-8">
+		<title>Sapient Exercise</title>
+		<link rel="stylesheet" type="text/css" href="style.less">
+		<script src="js/less.js" type="text/javascript"></script>
+		<script src="js/jquery.js" type="text/javascript"></script>
+		<script src="js/angular.min.js" type="text/javascript"></script>
+		<script src="js/sapientApp.js" type="text/javascript"></script>
+	</head>
+
+	<body ng-controller="contactCtrl">
+
+		<header class="banner">
+
+			<span class="left-margin"></span>
+
+		    <span class="logo"> 
+		        <a rel="home" title="Home">
+		        	<img alt="" src="images/sapient-logo.png"/>
+		        </a> 
+		    </span>
+
+		    <!-- Dropdown for mobile view -->
+		    <span id="menus-device">
+			    <select class="menus-device" ng-model="changedTab" ng-change="activeTabchanged()">
+				  <option value="Home" >Home</option>
+				  <option value="About Us" >About Us</option>
+				  <option value="Projetcs" >Projects</option>
+				  <option ng-selected="changedTab=='Contact Us'" value="Contact Us" >Contact Us</option>
+				</select>
+			</span>
+
+			<!-- Menu items for desktop view -->
+		    <span id="menus-desktop">
+				<ul class="topmenu">
+					<li><a ng-class="{'active':activeTab =='home'}" ng-click="activeTabClicked('home','Home')" >Home</a></li>      
+			        <li><a ng-class="{'active':activeTab =='about'}" ng-click="activeTabClicked('about','About Us')" >About Us</a></li>
+			        <li><a ng-class="{'active':activeTab =='projects'}" ng-click="activeTabClicked('projects','Projects')" >Projects</a></li>
+			        <li><a ng-class="{'active':activeTab =='contact'}" ng-click="activeTabClicked('contact','Contact Us')" >Contact Us</a></li>
+				</ul>
+			</span>
+
+		</header><!--end header-->
+
+		<header class="left-margin page-title" >
+			<p>{{activePage}}<p>
+			<hr/>
+		</header>
+
+		<div class="left-margin">
+			
+			<section class="careers-desktop" >
+				
+			careers
+
+
+			</section>
+
+			<article class="description">
+				{{description}}
+			</article>
+
+			<span ng-show="notification" class="notification" ng-class="{'red':error ,'green':!error}">
+				{{notification}}
+			</span>
+
+			<section class="form" ng-show="activeTab =='contact'">
+				<form>
+					<fieldset>
+
+					<input ng-model="name" type="text" name="name" value="" placeholder="Firstname Lastname">
+					<br>
+					<input ng-model="password" type="password" name="password" value="" placeholder="password" >
+					<br>
+					<input ng-model="cpassword" type="password" name="confirm-password" value="" placeholder="confirm password" >
+					<br>
+					<input ng-model="email" type="email" name="email" value="" placeholder="Email" >
+					<br>
+					<input ng-model="website" type="text" name="website" value="" placeholder="Website" >
+					<br>
+					<input ng-click="submitButtonClicked()" type="submit" value="Submit">
+
+					</fieldset>
+				</form>
+				
+			</section>
+
+		</div>
+
+		<section class="careers-device" >
+				
+			careers
+
+		</section>
+		
+	</body>
+
+</html>
