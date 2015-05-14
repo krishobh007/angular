@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>Puzzle App</title>
+		<link rel="stylesheet" type="text/css" href="css/puzzleApp.css">
+		<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.2.26/angular.min.js"></script>
+		<script src="js/puzzleApp.js"></script>
+		<script src="js/optionButtonDirective.js"></script>
+		<script src="js/baseCtrl.js"></script>
+		<script src="js/baseWebService.js"></script>
+		<script src="js/puzzleAppSrv.js"></script>
+		<script src="js/puzzleCtrl.js"></script>
+	</head>
+
+	<body ng-app="puzzleApp">
+
+		<div ng-controller="puzzleController" class="container">
+			<section ng-hide="showReport">
+				
+				<header>
+					<small>Javascript Quiz {{ activeQuestionIndex+1 }} of {{ totalQuestions }}</small></br>
+		        	<p class="question">{{ questionArray[activeQuestionIndex].text }} ?</p>
+		        </header>
+
+				<nav>
+					<ul>
+						<li>A - {{ questionArray[activeQuestionIndex].options[0] }}</li>
+						<li>B - {{ questionArray[activeQuestionIndex].options[1] }}</li>
+						<li>C - {{ questionArray[activeQuestionIndex].options[2] }}</li>
+						<li>D - {{ questionArray[activeQuestionIndex].options[3] }}</li>
+					</ul>
+				<nav>
+
+				<footer class="button-box">	
+					<span ng-repeat="i in [0,1,2,3]">
+						<option-button option-click="selectedOption(i)" text="{{getOption(i)}}"></option-button>
+					</span>
+				</footer>
+			
+			</section>
+			<section ng-show="showReport" class="report-section">
+				<table>
+				  <tr>
+				    <th>Question No</th>
+				    <th>Selected option</th>
+				    <th>Answer</th>
+				    <th>Score</th>
+				  </tr>
+				  
+				  <tr ng-repeat="result in questionArray" >
+				    <td>{{$index+1}}</td>
+				    <td>{{result.selectedOption}}</td>
+				    <td>{{result.rightAnswer}}</td>
+				    <td>{{result.score}}</td>
+				  </tr>
+				  <tr>
+				    <td colspan="3">Total Score</td>
+				    <td>{{score}} / {{totalQuestions*scoreForSingleAns}}</td>
+				  </tr>
+				</table>
+
+				<footer class="single-button-box">	
+					<option-button option-click="tryAgain()" text="TRY AGAIN"></option-button>
+				</footer>
+
+			</section>
+
+		</div>
+	</body>
+</html>
