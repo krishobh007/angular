@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+  <meta charset="UTF-8">
+
+  <title>Simple expense manager project - CodePen</title>
+
+  <link rel="stylesheet" href="css/style.css" media="screen" type="text/css" />
+  <link href="http://netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="css/jquery-ui.css" media="screen" type="text/css" />
+
+</head>
+
+<body ng-app="expManagerApp" ng-controller="expManagerController">
+  <h1>Simple expense manager project</h1>
+
+  <div id="form-box">
+    <h2 ng-hide="isEditMode">Add a new expense:</h2>
+    <h2 ng-show="isEditMode">Edit expense:</h2>
+    <div class="add-btn" ng-class="{'active': data.isActiveAddNewFriend}">
+        <span class="add-text">Add a friend</span>
+        <div class="friend-input">
+            <div><input ng-enter="addToFriendList()" ng-model="data.newFriendName" type="text" placeholder="Eg: Vandy" /></div>
+        </div>
+        <span class="fa-stack fa-lg" ng-click="data.isActiveAddNewFriend = !data.isActiveAddNewFriend">
+            <i class="fa fa-circle fa-stack-2x"></i>
+            <i class="fa fa-plus fa-stack-1x" title="Add a friend"></i>
+        </span>
+    </div>
+    <form>
+      <div>
+        <span>Type:</span> 
+          <select ng-model="expenseData.type">
+             <option ng-repeat="type in data.typeList" value="{{type.value}}">{{type.name}}</option>
+          </select>
+          <div ng-show="expenseData.type == ''" class="error-msg">Please select an option</div>
+      </div>
+      <div>
+        <span>Add friend:</span>
+        <select ng-options="friend as friend for friend in data.friendsList" ng-model="expenseData.friendList" name="friend" multiple="multiple">
+        </select>
+        <div ng-show="expenseData.friendList.length == 0" class="error-msg">Please select a friend</div>
+      </div>
+
+      <div>
+        <span>Name:</span> <input ng-model="expenseData.name" type="text" name="item-name" placeholder="What did you spend on?">
+        <div ng-show="expenseData.name == ''" class="error-msg">Cannot be empty</div>
+      </div>
+
+      <div>
+        <span>Date:</span> 
+
+        <input datepicker ng-model="expenseData.date" placeholder="Select Date" name="date"/>
+        <div ng-show="expenseData.date == ''" class="error-msg">Please select an option</div>
+      </div>
+
+      <div>
+        <span>Currency:</span>
+
+        <select ng-model="expenseData.currencyCode">
+           <option ng-repeat="currency in data.currencyList" value="{{currency.value}}">{{currency.name}}</option>
+        </select>
+          <div ng-show="expenseData.currencyCode == ''" class="error-msg">Please select an option</div>
+      </div>
+      <div>
+        <span>Amount:</span> <input ng-model="expenseData.amount" type="number" name="amount" placeholder="How much?">
+        <div ng-show="expenseData.amount == ''"  class="error-msg">Cannot be empty</div>
+      </div>
+
+      <div id="button" ng-hide="isEditMode" ng-click="addNewExpense()">Add a new expense</div>
+      <div id="button" ng-show="isEditMode"  ng-click="updateExpense(expenseData.id)">Done</div>
+
+    </form>
+  </div>
+  <div class="filter-block">
+      <div class="filter-option">
+        <span>Filter by friend:</span>
+        <select ng-options="friend as friend for friend in data.friendsList" ng-model="expenseData.friendListFilter" name="friend">
+        </select>
+      </div>
+      <div class="filter-option">
+        <span>Currency:</span>
+        <select ng-options="(currency.name) for currency in data.currencyList" ng-model="expenseData.currencyCodeFilter" name="currency"></select>
+      </div>
+  </div>
+  <table>
+    <tr>
+      <th id="type" class="center">type</th>
+      <th>name</th>
+      <th>Friends</th>
+      <th id="date">date</th>
+      <th style="text-align: right" id="amount">amount</th>
+      <th class="table-btn">edit</th>
+      <th class="table-btn">delete</th>
+    </tr>
+
+    <tr ng-repeat="exp in data.expenseList | orderBy:'date'">
+      <td><i class="fa" ng-class="{'fa-credit-card': exp.type.value == 'card', 'fa-money' : exp.type.value == 'cash' ,'fa-question-circle' : exp.type.value == 'other'  }"></i></td>
+      <td>{{exp.name}}</td>
+      <td>{{exp.friendList}}</td>
+      <td>{{exp.date}}</td>
+      <td class="amount">{{getCurrencySymbol(exp.currencyCode)}} {{exp.amount}}</td>
+      <td><i class="fa fa-pencil"  ng-click="editItem(exp)"></i></td>
+      <td><i class="fa fa-trash-o" ng-click="deleteItem(exp.id)"></i></td>
+    </tr>
+
+    <tr id="if-empty" ng-show="data.expenseList.length == 0">
+      <td colspan="4">
+        <span>Your added items will show up here!</span>
+      </td>
+    </tr>
+
+  </table>
+
+  
+  <script src="js/jquery-1.10.2.js"></script>
+  <script src="js/jquery-ui.js"></script>
+  <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.2.26/angular.min.js"></script>
+
+  <script src="js/util.js"></script>
+  <script src="js/expManagerApp.js"></script>
+  <script src="js/expManagerCtrl.js"></script>
+
+</body>
+
+</html>
