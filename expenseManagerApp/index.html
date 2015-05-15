@@ -19,24 +19,28 @@
   <div id="form-box">
     <h2 ng-hide="isEditMode">Add a new expense:</h2>
     <h2 ng-show="isEditMode">Edit expense:</h2>
+
     <div class="add-btn" ng-class="{'active': data.isActiveAddNewFriend}">
-        <span class="add-text">Add a friend</span>
-        <div class="friend-input">
-            <div><input ng-enter="addToFriendList()" ng-model="data.newFriendName" type="text" placeholder="Eg: Vandy" /></div>
-        </div>
-        <span class="fa-stack fa-lg" ng-click="data.isActiveAddNewFriend = !data.isActiveAddNewFriend">
-            <i class="fa fa-circle fa-stack-2x"></i>
-            <i class="fa fa-plus fa-stack-1x" title="Add a friend"></i>
-        </span>
+      <span class="add-text">Add a friend</span>
+      <div class="friend-input">
+          <div><input ng-enter="addToFriendList()" ng-model="data.newFriendName" type="text" placeholder="Eg: Vandy" /></div>
+      </div>
+      <span class="fa-stack fa-lg" ng-click="data.isActiveAddNewFriend = !data.isActiveAddNewFriend">
+          <i class="fa fa-circle fa-stack-2x"></i>
+          <i class="fa fa-plus fa-stack-1x" title="Add a friend"></i>
+      </span>
     </div>
+
     <form>
+
       <div>
         <span>Type:</span> 
-          <select ng-model="expenseData.type">
-             <option ng-repeat="type in data.typeList" value="{{type.value}}">{{type.name}}</option>
-          </select>
-          <div ng-show="expenseData.type == ''" class="error-msg">Please select an option</div>
+        <select ng-model="expenseData.type">
+           <option ng-repeat="type in data.typeList" value="{{type.value}}">{{type.name}}</option>
+        </select>
+        <div ng-show="expenseData.type == ''" class="error-msg">Please select an option</div>
       </div>
+
       <div>
         <span>Add friend:</span>
         <select ng-options="friend as friend for friend in data.friendsList" ng-model="expenseData.friendList" name="friend" multiple="multiple">
@@ -45,27 +49,28 @@
       </div>
 
       <div>
-        <span>Name:</span> <input ng-model="expenseData.name" type="text" name="item-name" placeholder="What did you spend on?">
+        <span>Name:</span>
+        <input ng-model="expenseData.name" type="text" name="item-name" placeholder="What did you spend on?">
         <div ng-show="expenseData.name == ''" class="error-msg">Cannot be empty</div>
       </div>
 
       <div>
         <span>Date:</span> 
-
         <input datepicker ng-model="expenseData.date" placeholder="Select Date" name="date"/>
         <div ng-show="expenseData.date == ''" class="error-msg">Please select an option</div>
       </div>
 
       <div>
         <span>Currency:</span>
-
         <select ng-model="expenseData.currencyCode">
            <option ng-repeat="currency in data.currencyList" value="{{currency.value}}">{{currency.name}}</option>
         </select>
-          <div ng-show="expenseData.currencyCode == ''" class="error-msg">Please select an option</div>
+        <div ng-show="expenseData.currencyCode == ''" class="error-msg">Please select an option</div>
       </div>
+
       <div>
-        <span>Amount:</span> <input ng-model="expenseData.amount" type="number" name="amount" placeholder="How much?">
+        <span>Amount:</span>
+        <input ng-model="expenseData.amount" type="number" name="amount" placeholder="How much?">
         <div ng-show="expenseData.amount == ''"  class="error-msg">Cannot be empty</div>
       </div>
 
@@ -74,17 +79,24 @@
 
     </form>
   </div>
+
   <div class="filter-block">
-      <div class="filter-option">
-        <span>Filter by friend:</span>
-        <select ng-options="friend as friend for friend in data.friendsList" ng-model="expenseData.friendListFilter" name="friend">
-        </select>
-      </div>
-      <div class="filter-option">
-        <span>Currency:</span>
-        <select ng-options="(currency.name) for currency in data.currencyList" ng-model="expenseData.currencyCodeFilter" name="currency"></select>
-      </div>
+
+    <div class="filter-option">
+      <span>Filter by friend:</span>
+      <select ng-options="friend as friend for friend in data.friendsList" ng-model="expenseData.friendListFilter" name="friend">
+      </select>
+    </div>
+
+    <div class="filter-option">
+      <span>Currency:</span>
+      <select ng-change="currencyCodeChanged()" ng-model="expenseData.currencyCodeFilter">
+         <option ng-repeat="currency in data.currencyList" value="{{currency.value}}">{{currency.name}}</option>
+      </select>
+    </div>
+
   </div>
+
   <table>
     <tr>
       <th id="type" class="center">type</th>
@@ -97,11 +109,13 @@
     </tr>
 
     <tr ng-repeat="exp in data.expenseList | orderBy:'date'">
-      <td><i class="fa" ng-class="{'fa-credit-card': exp.type.value == 'card', 'fa-money' : exp.type.value == 'cash' ,'fa-question-circle' : exp.type.value == 'other'  }"></i></td>
+      <td>
+        <i class="fa" ng-class="{'fa-credit-card': exp.type == 'card', 'fa-money' : exp.type == 'cash' ,'fa-question-circle' : exp.type == 'other'  }"></i>
+      </td>
       <td>{{exp.name}}</td>
-      <td>{{exp.friendList}}</td>
+      <td>{{exp.friendListStr}}</td>
       <td>{{exp.date}}</td>
-      <td class="amount">{{getCurrencySymbol(exp.currencyCode)}} {{exp.amount}}</td>
+      <td class="amount">{{getCurrencySymbol(exp.currencyCode)}}{{exp.amount}}</td>
       <td><i class="fa fa-pencil"  ng-click="editItem(exp)"></i></td>
       <td><i class="fa fa-trash-o" ng-click="deleteItem(exp.id)"></i></td>
     </tr>
@@ -113,14 +127,15 @@
     </tr>
 
   </table>
-
   
-  <script src="js/jquery-1.10.2.js"></script>
-  <script src="js/jquery-ui.js"></script>
+  <script src="lib/jquery-1.10.2.js"></script>
+  <script src="lib/jquery-ui.js"></script>
   <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.2.26/angular.min.js"></script>
 
   <script src="js/util.js"></script>
   <script src="js/expManagerApp.js"></script>
+  <script src="js/ngEnterDir.js"></script>
+  <script src="js/datepickerDir.js"></script>
   <script src="js/expManagerCtrl.js"></script>
 
 </body>

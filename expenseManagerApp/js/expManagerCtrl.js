@@ -32,13 +32,31 @@ expManagerApp.controller('expManagerController', ['$scope', '$rootScope',
 	    	"id"			: "",
 	    	"type"			: "card",    // Setting default type selection.
 	    	"friendList" 	: [],
+            "friendListStr" : "",
 	    	"name"			: "",
 	    	"date"			: "",
 	    	"currencyCode"	: "dollar", // Setting default currency selection.
-	    	"amount"		: ""    
+	    	"amount"		: "",
+            // Default values for table filters.
+            "friendListFilter"      : $scope.data.friendsList[0],
+            "currencyCodeFilter"    : "dollar"
 	    };
 	};
     
+    // Checking for field validation.
+    var validation = function(){
+
+        var isValidationSuccess = false;
+        var data = $scope.expenseData;
+        if(data.type == "" || data.friendList.length == 0  || data.name == "" || data.date == "" || data.currencyCode == "" || data.amount == ""){
+            isValidationSuccess = false;
+        }
+        else{
+            isValidationSuccess = true;
+        }
+        return isValidationSuccess;
+    };
+
     // To add a new friends name to the friends list.
     $scope.addToFriendList = function(){
         $scope.data.friendsList.push($scope.data.newFriendName);
@@ -47,10 +65,13 @@ expManagerApp.controller('expManagerController', ['$scope', '$rootScope',
 
     // To add new expense
     $scope.addNewExpense = function(){
-    	$scope.expenseData.id = expenseId;
-    	$scope.data.expenseList.push($scope.expenseData);
-    	init(); // Reset the fields.
-        expenseId ++;  // incrementing id for next expense.
+        if(validation()){
+        	$scope.expenseData.id = expenseId;
+            $scope.expenseData.friendListStr = $scope.expenseData.friendList.toString();
+        	$scope.data.expenseList.push($scope.expenseData);
+        	init(); // Reset the fields.
+            expenseId ++;  // incrementing id for next expense.
+        }
     };
 
     // Deleting an expense
@@ -74,19 +95,39 @@ expManagerApp.controller('expManagerController', ['$scope', '$rootScope',
 
     // Saving the expense after edit.
     $scope.updateExpense = function(id){
-    	$scope.isEditMode = false;
-        var editedItem = dclone($scope.expenseData);
-        angular.forEach($scope.data.expenseList,function(item, index) {
-            if(item.id == id){
-              $scope.data.expenseList[index] = [];
-              $scope.data.expenseList[index] = editedItem;
-            }
-        });
-        init(); 
+
+        if(validation()){
+        	$scope.isEditMode = false;
+            $scope.expenseData.friendListStr = $scope.expenseData.friendList.toString();
+            var editedItem = dclone($scope.expenseData);
+            angular.forEach($scope.data.expenseList,function(item, index) {
+                if(item.id == id){
+                  $scope.data.expenseList[index] = [];
+                  $scope.data.expenseList[index] = editedItem;
+                }
+            });
+            init(); 
+        }
     };
-    
+
+    // To get currency codes.
     $scope.getCurrencySymbol = function(currencyCode){
         return getCurrencySign(currencyCode);
+    };
+
+    // To hanlde currency code change in the table.
+    $scope.currencyCodeChanged = function(){
+
+        var convertTo = $scope.expenseData.currencyCodeFilter;
+        var convertFrom = "", amount = "";
+
+        angular.forEach($scope.data.expenseList,function(item, index) {
+            convertFrom = item.currencyCode;
+            amount = item.amount;
+           
+            item.currencyCode = convertTo; // update currency symbol
+            item.amount = currencyConverter(convertFrom,convertTo,amount); // update amount
+        });
     };
 
     init();
